@@ -1,6 +1,8 @@
 import fastf1
 import pandas as pd
 
+fastf1.Cache.enable_cache("/Users/ethan/Documents/coding/F1_telem/cache/fastf1")
+
 session = fastf1.get_session(2024, 8, 'Q')
 
 session.load()
@@ -19,8 +21,8 @@ def get_fastest(driverId, session):
         print("There are no clean laps to use")
         return None
     else:
-        fastest = clean_laps.pick_fastest().loc['LapTime']
-        return driver, team, fastest
+        fastest_lap = clean_laps.pick_fastest()
+        return driver, team, fastest_lap
 
 print(session.name)
 print(session.event['EventName'])
@@ -29,11 +31,6 @@ print(session.date)
 drivers = ['LEC', 'HAM']
 
 for i in drivers:
-    driver, team, driver_lap = get_fastest(i, session)
+    driver, team, lap = get_fastest(i, session)
     print(f"Driver: {driver} for {team}")
-    total_seconds = driver_lap.total_seconds()
-    minutes = int(total_seconds // 60)
-    seconds = total_seconds - 60 * minutes
-    lap_str = f"{minutes}:{seconds:06.3f}"
-    print(f"Time: {lap_str}")
 
