@@ -1,5 +1,6 @@
 import fastf1
 from src.data_loader import get_fastest, get_telemetry
+from src.preprocess import clean_telem, create_grid
 
 fastf1.Cache.enable_cache("/Users/ethan/Documents/coding/F1_telem/cache/fastf1")
 
@@ -12,6 +13,7 @@ print(session.event['EventName'])
 print(session.date)
 
 drivers = ['LEC', 'HAM']
+driver_telems = {}
 
 for i in drivers:
     driver, team, lap = get_fastest(i, session)
@@ -25,7 +27,9 @@ for i in drivers:
     print(f"Tire Compound: {lap.loc['Compound']}")
     
     telem = get_telemetry(lap)
-
-    print(telem[['Distance', 'Speed', 'Throttle', 'Brake', 'X', 'Y', 'Time']].head())
+    cleaned = clean_telem(telem)
+    driver_telems[driver] = cleaned
     print("\n")
 
+
+print(driver_telems)
