@@ -1,11 +1,3 @@
-import fastf1
-import pandas as pd
-
-fastf1.Cache.enable_cache("/Users/ethan/Documents/coding/F1_telem/cache/fastf1")
-
-session = fastf1.get_session(2024, 8, 'Q')
-
-session.load()
 
 # function to get the fastest lap of a given driver
 def get_fastest(driverId, session):
@@ -24,13 +16,8 @@ def get_fastest(driverId, session):
         fastest_lap = clean_laps.pick_fastest()
         return driver, team, fastest_lap
 
-print(session.name)
-print(session.event['EventName'])
-print(session.date)
 
-drivers = ['LEC', 'HAM']
-
-for i in drivers:
-    driver, team, lap = get_fastest(i, session)
-    print(f"Driver: {driver} for {team}")
-
+# function to retrieve the telemetry data from a lap
+def get_telemetry(lap_info):
+    telemetry = lap_info.get_telemetry()
+    return telemetry
