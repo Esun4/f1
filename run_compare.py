@@ -1,6 +1,6 @@
 import fastf1
 from src.data_loader import get_fastest, get_telemetry
-from src.preprocess import clean_telem, create_grid
+from src.preprocess import clean_telem, create_grid, align_to_grid
 
 fastf1.Cache.enable_cache("/Users/ethan/Documents/coding/F1_telem/cache/fastf1")
 
@@ -32,4 +32,10 @@ for i in drivers:
     print("\n")
 
 
-print(driver_telems)
+# creating a grid
+grid = create_grid(driver_telems['Charles Leclerc'], driver_telems['Lewis Hamilton'])
+
+# aligned dataframes for both drivers
+alignedA = align_to_grid(driver_telems['Charles Leclerc'], grid)
+alignedB = align_to_grid(driver_telems['Lewis Hamilton'], grid)
+
