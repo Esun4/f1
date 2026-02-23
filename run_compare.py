@@ -1,7 +1,7 @@
 import fastf1
 from src.data_loader import get_fastest, get_telemetry
 from src.preprocess import clean_telem, create_grid, align_to_grid
-from src.visualize import plot_one, plot_compare
+from src.visualize import plot_one, plot_compare, compute_delta, plot_delta_curve
 
 fastf1.Cache.enable_cache("/Users/ethan/Documents/coding/F1_telem/cache/fastf1")
 
@@ -41,10 +41,14 @@ alignedA = align_to_grid(driver_telems['Charles Leclerc'], grid)
 alignedB = align_to_grid(driver_telems['Lewis Hamilton'], grid)
 
 # Distance vs Speed plot
-plot_compare(alignedA, alignedB, y_col="Speed", labelA='LEC', labelB='HAM', title="Speed vs Distance")
+plot_compare(alignedA, alignedB, y_col="Speed", labelA='LEC', labelB='HAM', title="SVD")
 
 # Distance vs Throttle plot
-plot_compare(alignedA, alignedB, y_col="Throttle", labelA='LEC', labelB='HAM', title="Throttle vs Distance")
+plot_compare(alignedA, alignedB, y_col="Throttle", labelA='LEC', labelB='HAM', title="TVD")
 
 # Distance vs Brake plot
-plot_compare(alignedA, alignedB, y_col="Brake", labelA='LEC', labelB='HAM', title="Brake vs Distance")
+plot_compare(alignedA, alignedB, y_col="Brake", labelA='LEC', labelB='HAM', title="BVD")
+
+# craete the deltaplot and save the image
+delta_df = compute_delta(alignedA, alignedB)
+plot_delta_curve(delta_df, labelA="LEC", labelB="HAM")
