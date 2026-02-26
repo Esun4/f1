@@ -13,14 +13,17 @@ def clean_telem(telem):
 
 # pass the cleaned data into this function
 def create_grid(driver1, driver2):
+    minA = driver1['Distance'].min()
+    minB = driver2['Distance'].min()
     maxA = driver1['Distance'].max()
     maxB = driver2['Distance'].max()
     max_common = min(maxA, maxB)
+    min_common = max(minA, minB)
 
     # when doing normalized distance
     # DistanceNorm = Distance / max_distance
     
-    even_array = np.linspace(0, max_common, 1000)
+    even_array = np.linspace(min_common, max_common, 1000)
 
     return even_array
 

@@ -26,7 +26,7 @@ def compute_delta(alignedA, alignedB):
 
     vA = alignedA['Speed'].to_numpy(dtype=float) / 3.6
     vB = alignedB['Speed'].to_numpy(dtype=float) / 3.6
-
+    
     dd = np.diff(dist)
 
     vA_seg = (vA[:-1] + vA[1:]) / 2.0
