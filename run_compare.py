@@ -3,6 +3,7 @@ from src.data_loader import get_fastest, get_telemetry
 from src.preprocess import clean_telem, create_grid, align_to_grid
 from src.visualize import plot_one, plot_compare, compute_delta, plot_delta_curve
 
+
 fastf1.Cache.enable_cache("/Users/ethan/Documents/coding/F1_telem/cache/fastf1")
 
 session = fastf1.get_session(2024, 8, 'Q')
@@ -15,6 +16,7 @@ print(session.date)
 
 drivers = ['LEC', 'HAM']
 driver_telems = {}
+times = []
 
 for i in drivers:
     driver, team, lap = get_fastest(i, session)
@@ -23,6 +25,7 @@ for i in drivers:
     minutes = int(total_seconds // 60)
     seconds = total_seconds - 60 * minutes
     lap_str = f"{minutes}:{seconds:06.3f}"
+    times.append(total_seconds)
     print(f"Time: {lap_str}")
     print(f"Lap Number: {lap.loc['LapNumber']}")
     print(f"Tire Compound: {lap.loc['Compound']}")
@@ -52,3 +55,8 @@ plot_compare(alignedA, alignedB, y_col="Brake", labelA='LEC', labelB='HAM', titl
 # craete the deltaplot and save the image
 delta_df = compute_delta(alignedA, alignedB)
 plot_delta_curve(delta_df, labelA="LEC", labelB="HAM")
+
+approx_delta = delta_df["delta_s"].iloc[-1]
+actual_delta = times[0] - times[1]
+print(approx_delta)
+print(actual_delta)
