@@ -5,6 +5,7 @@ from src.data_loader import get_fastest, get_telemetry
 from src.preprocess import clean_telem, create_grid, align_to_grid
 from src.visualize import plot_one, plot_compare, compute_delta, plot_delta_curve
 from src.features import compute_lap, compute_pair_features
+from src.baseline_model import compute_score, predict_winner, actual_winner
 
 fastf1.Cache.enable_cache("/Users/ethan/Documents/coding/F1_telem/cache/fastf1")
 
@@ -60,7 +61,6 @@ plot_delta_curve(delta_df, labelA="LEC", labelB="HAM")
 
 # this is the final delta value
 approx_delta = delta_df["delta_s"].iloc[-1]
-actual_delta = times[0] - times[1]
 
 max_gain = float(delta_df["delta_s"].min())
 max_loss = float(delta_df["delta_s"].max())
@@ -114,19 +114,53 @@ row.update(identifiers)
 row.update(pair_feats)
 row.update(delta_summaries)
 
-# creates csv and puts in outputs folder
 
+predicted = compute_score(pair_feats)
+predicted_winner = predict_winner(predicted)
+actual = actual_winner(target_delta_s)
+
+baseline_correct = predicted_winner == actual
+
+print(f"Baseline score: {predicted}")
+print(f"Predicted winner: {predicted_winner}")
+print(f"Actual winner: {actual}")
+print(f"Baseline correct: {baseline_correct}")
+
+baseline_results = {
+    "baseline_score": float(predicted),
+    "predicted_winner": predicted_winner,
+    "actual_winner": actual,
+    "baseline_correct": baseline_correct,
+}
+
+row.update(baseline_results)
+
+# create outputs/tables if it doesn't exist
 out_dir = Path("outputs") / "tables"
 out_dir.mkdir(parents=True, exist_ok=True)
 
 dataset_path = out_dir / "dataset.csv"
 
+# make a one-row dataframe from the current run
 df_row = pd.DataFrame([row])
 
-# Append if exists otherwise create with header
+# columns that define one unique comparison
+key_cols = ["year", "event_name", "session_name", "driverA_code", "driverB_code"]
+
 if dataset_path.exists():
-    df_row.to_csv(dataset_path, mode="a", header=False, index=False)
+    # load old dataset
+    existing_df = pd.read_csv(dataset_path)
+
+    # combine old + new
+    combined_df = pd.concat([existing_df, df_row], ignore_index=True)
+
+    # if the same comparison already exists, keep the LAST one (the new run)
+    combined_df = combined_df.drop_duplicates(subset=key_cols, keep="last")
+
+    # save cleaned dataset back
+    combined_df.to_csv(dataset_path, index=False)
 else:
+    # first run: just create the file
     df_row.to_csv(dataset_path, index=False)
 
 print(f"\nSaved comparison row to: {dataset_path}")

@@ -30,14 +30,14 @@ def compute_lap(aligned_df):
     }
 
 def compute_pair_features(featuresA, featuresB):
-    mean_speed_diff = abs(featuresA['mean_speed'] - featuresB['mean_speed'])
-    top_speed_diff = abs(featuresA['max_speed'] - featuresB['max_speed'])
-    min_speed_diff = abs(featuresA['min_speed'] - featuresB['min_speed'])
-    std_speed_diff = abs(featuresA['std_speed'] - featuresB['std_speed'])
+    mean_speed_diff = featuresA['mean_speed'] - featuresB['mean_speed']
+    top_speed_diff = featuresA['max_speed'] - featuresB['max_speed']
+    min_speed_diff = featuresA['min_speed'] - featuresB['min_speed']
+    std_speed_diff = featuresA['std_speed'] - featuresB['std_speed']
 
-    full_throttle_diff = abs(featuresA['pct_full_throttle'] - featuresB['pct_full_throttle'])
-    avg_throttle_diff = abs(featuresA['avg_throttle'] - featuresB['avg_throttle'])
-    brake_event_diff = abs(featuresA['brake_event_count'] - featuresB['brake_event_count'])
+    full_throttle_diff = featuresA['pct_full_throttle'] - featuresB['pct_full_throttle']
+    avg_throttle_diff = featuresA['avg_throttle'] - featuresB['avg_throttle']
+    brake_event_diff = featuresA['brake_event_count'] - featuresB['brake_event_count']
 
     return {
         "mean_speed_diff": mean_speed_diff,
