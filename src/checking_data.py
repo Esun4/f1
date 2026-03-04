@@ -1,4 +1,9 @@
 import pandas as pd
+from sklearn.model_selection import GroupShuffleSplit
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+
+import math
 
 df = pd.read_csv('../outputs/tables/dataset.csv')
 
@@ -47,9 +52,66 @@ meta_cols = [
     "baseline_correct",
 ]
 
-# not really ncecessary because their are not NaNs
-model_df = df[feature_cols + [target_col]].dropna()
 
+model_df = df[feature_cols + [target_col, "year", "event_name", "session_name"]].dropna().copy()
+model_df["session_id"] = (
+    model_df["year"].astype(str)
+    + "_"
+    + model_df["event_name"].astype(str)
+    + "_"
+    + model_df["session_name"].astype(str)
+)
 
 X = model_df[feature_cols]
 y = model_df[target_col]
+groups = model_df["session_id"]
+
+#splitting the data
+gss = GroupShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
+
+train_idx, test_idx = next(gss.split(X, y, groups=groups))
+
+X_train = X.iloc[train_idx]
+X_test = X.iloc[test_idx]
+y_train = y.iloc[train_idx]
+y_test = y.iloc[test_idx]
+
+train_sessions = set(groups.iloc[train_idx])
+test_sessions = set(groups.iloc[test_idx])
+
+# create the model
+
+# create model
+model = RandomForestRegressor(
+    n_estimators=100,
+    random_state=42
+)
+
+model.fit(X_train, y_train)
+
+# make predictions
+y_pred = model.predict(X_test)
+
+# evaluate
+mae = mean_absolute_error(y_test, y_pred)
+rmse = math.sqrt(mean_squared_error(y_test, y_pred))
+r2 = r2_score(y_test, y_pred)
+
+print("MAE:", mae)
+print("RMSE:", rmse)
+print("R^2:", r2)
+
+results_df = pd.DataFrame({
+    "actual_delta": y_test.values,
+    "predicted_delta": y_pred
+})
+
+print(results_df.head(10))
+
+predicted_winner = ["A" if pred < 0 else "B" for pred in y_pred]
+actual_winner = ["A" if actual < 0 else "B" for actual in y_test]
+
+correct = sum(p == a for p, a in zip(predicted_winner, actual_winner))
+accuracy = correct / len(actual_winner)
+
+print("ML winner accuracy:", accuracy)
