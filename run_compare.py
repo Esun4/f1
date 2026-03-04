@@ -6,7 +6,7 @@ from src.data_loader import get_fastest
 
 fastf1.Cache.enable_cache("/Users/ethan/Documents/coding/F1_telem/cache/fastf1")
 
-sessions = [6, 7, 8, 9, 10]
+sessions = [1, 2, 3, 4, 5]
 
 # create a loop to go through the sessions
 
