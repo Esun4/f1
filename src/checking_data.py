@@ -20,8 +20,8 @@ print(rows, cols)
 counts = df['baseline_correct'].value_counts()
 true_count = counts.get(True, 0)
 false_count = counts.get(False, 0)
-print(true_count)
-print(false_count)
+# print(true_count)
+# print(false_count)
 
 feature_cols = [
     "mean_speed_diff",
@@ -53,7 +53,8 @@ meta_cols = [
 ]
 
 
-model_df = df[feature_cols + [target_col, "year", "event_name", "session_name"]].dropna().copy()
+model_df = df[feature_cols + [target_col, "year", "event_name", "session_name", "baseline_correct"]].dropna().copy()
+
 model_df["session_id"] = (
     model_df["year"].astype(str)
     + "_"
@@ -70,6 +71,8 @@ groups = model_df["session_id"]
 gss = GroupShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
 
 train_idx, test_idx = next(gss.split(X, y, groups=groups))
+test_rows = model_df.iloc[test_idx].copy()
+baseline_acc = (test_rows["baseline_correct"] == True).mean()
 
 X_train = X.iloc[train_idx]
 X_test = X.iloc[test_idx]
@@ -78,6 +81,10 @@ y_test = y.iloc[test_idx]
 
 train_sessions = set(groups.iloc[train_idx])
 test_sessions = set(groups.iloc[test_idx])
+
+print("Train sessions:", train_sessions)
+print("Test sessions:", test_sessions)
+print("Overlap:", train_sessions & test_sessions)
 
 # create the model
 
@@ -108,10 +115,11 @@ results_df = pd.DataFrame({
 
 print(results_df.head(10))
 
-predicted_winner = ["A" if pred < 0 else "B" for pred in y_pred]
-actual_winner = ["A" if actual < 0 else "B" for actual in y_test]
+ml_pred_winner = pd.Series(["A" if p < 0 else "B" for p in y_pred], index=test_rows.index)
+ml_true_winner = pd.Series(["A" if t < 0 else "B" for t in y_test], index=test_rows.index)
+ml_acc = (ml_pred_winner == ml_true_winner).mean()
 
-correct = sum(p == a for p, a in zip(predicted_winner, actual_winner))
-accuracy = correct / len(actual_winner)
 
-print("ML winner accuracy:", accuracy)
+print("Baseline accuracy (test):", baseline_acc)
+print("ML accuracy (test):", ml_acc)
+print("Improvement:", ml_acc - baseline_acc)
