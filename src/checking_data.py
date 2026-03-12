@@ -120,6 +120,4 @@ ml_true_winner = pd.Series(["A" if t < 0 else "B" for t in y_test], index=test_r
 ml_acc = (ml_pred_winner == ml_true_winner).mean()
 
 
-print("Baseline accuracy (test):", baseline_acc)
 print("ML accuracy (test):", ml_acc)
-print("Improvement:", ml_acc - baseline_acc)
