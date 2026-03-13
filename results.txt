@@ -1,18 +1,19 @@
-Train sessions: {'2024_Spanish Grand Prix_Qualifying', '2024_Japanese Grand Prix_Qualifying', '2024_Monaco Grand Prix_Qualifying', '2024_Emilia Romagna Grand Prix_Qualifying', '2024_Australian Grand Prix_Qualifying', '2024_Chinese Grand Prix_Qualifying', '2024_Canadian Grand Prix_Qualifying', '2024_Miami Grand Prix_Qualifying'}
-Test sessions: {'2024_Saudi Arabian Grand Prix_Qualifying', '2024_Bahrain Grand Prix_Qualifying'}
+4446 26
+Train sessions: {'2024_United States Grand Prix_Qualifying', '2024_Australian Grand Prix_Qualifying', '2024_Las Vegas Grand Prix_Qualifying', '2024_Belgian Grand Prix_Qualifying', '2024_Emilia Romagna Grand Prix_Qualifying', '2024_Japanese Grand Prix_Qualifying', '2024_Austrian Grand Prix_Qualifying', '2024_Singapore Grand Prix_Qualifying', '2024_Canadian Grand Prix_Qualifying', '2024_São Paulo Grand Prix_Qualifying', '2024_Bahrain Grand Prix_Qualifying', '2024_Spanish Grand Prix_Qualifying', '2024_Dutch Grand Prix_Qualifying', '2024_Italian Grand Prix_Qualifying', '2024_Azerbaijan Grand Prix_Qualifying', '2024_Saudi Arabian Grand Prix_Qualifying', '2024_Monaco Grand Prix_Qualifying', '2024_British Grand Prix_Qualifying', '2024_Mexico City Grand Prix_Qualifying'}
+Test sessions: {'2024_Miami Grand Prix_Qualifying', '2024_Abu Dhabi Grand Prix_Qualifying', '2024_Qatar Grand Prix_Qualifying', '2024_Hungarian Grand Prix_Qualifying', '2024_Chinese Grand Prix_Qualifying'}
 Overlap: set()
-MAE: 0.13656083102493002
-RMSE: 0.17353120239435887
-R^2: 0.8735601486636382
+MAE: 0.22283232631578878
+RMSE: 0.32216994226731643
+R^2: 0.7228952834392921
    actual_delta  predicted_delta
-0         0.014         -0.02649
-1        -0.306         -0.20359
-2        -0.328         -0.22906
-3        -0.358         -0.38298
-4        -0.363         -0.24883
-5        -0.435         -0.27717
-6        -0.504         -0.19972
-7        -0.531         -0.50312
-8        -0.672         -0.50272
-9        -0.950         -0.91764
-ML accuracy (test): 0.9833795013850416
+0        -0.322         -0.38442
+1        -0.488         -0.28871
+2        -0.505         -0.46747
+3        -0.613         -0.53120
+4        -0.629         -0.63613
+5        -0.637         -0.45617
+6        -0.773         -0.80903
+7        -0.944         -0.81794
+8        -1.005         -0.83438
+9        -1.178         -1.25913
+ML accuracy (test): 0.9894736842105263
