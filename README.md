@@ -101,10 +101,10 @@ Reported metrics include:
 
 Example grouped split output from the current version:
 
-- **MAE:** 0.1366 s
-- **RMSE:** 0.1735 s
-- **R²:** 0.8736
-- **Winner prediction accuracy:** 98.34%
+- **MAE:** 0.2228 s
+- **RMSE:** 0.3222 s
+- **R²:** 0.7229
+- **Winner prediction accuracy:** 98.95%
 
 ---
 
@@ -159,10 +159,10 @@ This prints grouped train/test split information, regression metrics, and winner
 
 On held-out qualifying sessions, the current version produces strong same-session performance:
 
-- **MAE:** 0.1366 s
-- **RMSE:** 0.1735 s
-- **R²:** 0.8736
-- **Winner prediction accuracy:** 98.34%
+- **MAE:** 0.2228 s
+- **RMSE:** 0.3222 s
+- **R²:** 0.7229
+- **Winner prediction accuracy:** 98.95%
 
 These results show that telemetry-derived lap features capture a large amount of the variation in within-session lap time differences.
 
